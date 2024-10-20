@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to practice Git</title>
+    <style>
+      body {
+        margin: 0;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://threejs.org/examples/js/fonts/helvetiker_regular.typeface.js"></script>
+    <script src="https://threejs.org/examples/jsm/loaders/FontLoader.js"></script>
+
+    <script>
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      let textMesh;
+      const loader = new THREE.FontLoader();
+      loader.load(
+        "https://threejs.org/examples/fonts/helvetiker_regular.typeface.json",
+        function (font) {
+          const textGeometry = new THREE.TextGeometry("how to practice git", {
+            font: font,
+            size: 0.8,
+            height: 0.2,
+            curveSegments: 12,
+            bevelEnabled: true,
+            bevelThickness: 0.01,
+            bevelSize: 0.05,
+            bevelOffset: 0,
+            bevelSegments: 5,
+          });
+
+          const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+          textMesh = new THREE.Mesh(textGeometry, textMaterial);
+          textMesh.position.set(-5, 0, 0);
+          scene.add(textMesh);
+        }
+      );
+
+      camera.position.z = 5;
+
+      let direction = 0.01;
+      function animate() {
+        requestAnimationFrame(animate);
+        if (textMesh) {
+          textMesh.position.y += direction;
+          if (textMesh.position.y > 1 || textMesh.position.y < -1) {
+            direction *= -1;
+          }
+        }
+        renderer.render(scene, camera);
+      }
+
+      animate();
+    </script>
+  </body>
+</html>
